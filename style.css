@@ -16,7 +16,6 @@ html {
 }
 
 body {
-
   color: white;
   font-size: 1.6rem;
   background-size: 100% 100%;
@@ -40,6 +39,17 @@ h1 {
   text-align: center;
   padding-bottom: 2rem;
   font-size: clamp(18px, 6vw + 10px, 50px);
+}
+
+input {
+  width: 10rem;
+  padding: .5rem 1rem;
+  color: white;
+  font-family: inherit;
+  font-size: 1.6rem;
+  background: #1b838b6c;
+  border-radius: 6px;
+  border: none;
 }
 
 .field {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minesweeper</title>
+  <title>Sharksweep</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,12 +14,12 @@
 
     <div class="options">
       <div class="options__grid-size">
-        <span class="options__grid-size-label">Grid size:</span>
-        <span class="options__grid-size-value">10 x 10</span>
+        <label class="options__grid-size-label" for="grid-size">Grid size: 10 x 10</label>
+        <!-- <input class="options__grid-size-input" value="10" id="grid-size"></input> -->
       </div>
       <div class="options__sharks-amount">
-        <span class="options__sharks-amount-label">Sharks:</span>
-        <span class="options__sharks-amount-value">10</span>
+        <label class="options__sharks-amount-label" for="sharks-amount">Sharks:</label>
+        <input class="options__sharks-amount-value" type="number" min="1" value="10" id="sharks-amount"></input>
       </div>
       <button class="play-btn">Play</button>
     </div>

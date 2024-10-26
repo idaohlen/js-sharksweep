@@ -1,6 +1,8 @@
 const fieldElement = document.querySelector(".field");
-const gridSizeLabel = document.querySelector(".options__grid-size-value");
-const sharksAmountLabel = document.querySelector(".options__sharks-amount-value");
+const gridSizeInput = document.querySelector("#grid-size");
+const gridSizeLabel = document.querySelector(".options__grid-size-label");
+const sharksAmountInput = document.querySelector("#sharks-amount");
+const sharksAmountLabel = document.querySelector(".options__sharks-amount-label");
 const playBtn = document.querySelector(".play-btn");
 
 let gridSize = 10;
@@ -43,7 +45,7 @@ function renderField() {
     }
   }
 
-  gridSizeLabel.textContent = `${gridSize} x ${gridSize}`;
+  gridSizeLabel.textContent = `Size: ${gridSize} x ${gridSize}`;
 }
 
 // Randomize the sharks placements and add them to the field data
@@ -51,7 +53,7 @@ function randomizeSharks(count) {
   sharks = [];
   let i = 0;
 
-  while (i < count) {
+  while (i < count && i < gridSize * gridSize) {
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
@@ -163,6 +165,8 @@ function clearCell(x, y) {
 
 // Start playing the game
 function play() {
+  sharksAmount = Number.parseInt(sharksAmountInput.value);
+
   sharks = [];
   clearedCells = 0;
   playing = true;
