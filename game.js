@@ -1,28 +1,35 @@
 const grid = document.querySelector(".grid");
 const gridSizeLabel = document.querySelector(".options__grid-size");
+const playBtn = document.querySelector(".play-btn");
 
-let gridSize = 10;
-let minesAmount = 5;
+let gridSize = 3;
+let minesAmount = 1;
 let field = [];
-const mines = [];
+let mines = [];
+let clearedCells = 0;
+
+let playing = false;
 
 function renderGrid(size) {
   // Create field grid
+  grid.innerHTML = "";
   field = new Array(gridSize);
 
   grid.style.gridTemplateColumns = "repeat(" + gridSize + ", 1fr)";
   grid.style.gridTemplateRows = "repeat(" + gridSize + ", 1fr)";
 
   // Rows: x
-  for (let i = 0; i < size; i++) {
-    field[i] = new Array(size);
+  for (let x = 0; x < size; x++) {
+    field[x] = new Array(size);
     // Columns: y
-    for (let j = 0; j < size; j++) {
+    for (let y = 0; y < size; y++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
+      cell.addEventListener("click", () => pickCell(x, y));
+
       grid.appendChild(cell);
 
-      field[i][j] = { element: cell, mine: false, adjacentMines: 0 };
+      field[x][y] = { element: cell, mine: false, adjacentMines: 0 };
     }
   }
 
@@ -30,13 +37,12 @@ function renderGrid(size) {
 }
 
 function randomizeMines(count, gridSize) {
+  mines = [];
   let i = 0;
 
   while (i < count) {
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
-
-    console.log(x, y);
 
     if (!field[x][y].mine) {
       field[x][y].mine = true;
@@ -46,11 +52,10 @@ function randomizeMines(count, gridSize) {
   }
 }
 
-function displayMines() {
-  console.log(mines);
-
+function placeMines() {
   mines.forEach(mine => {
-    field[mine.x][mine.y].element.innerHTML = "🔴";
+    // Debug: Display mines
+    // field[mine.x][mine.y].element.innerHTML = "🔴";
 
     const neighbors = {
       north:     field?.[mine.x - 1]?.[mine.y],
@@ -66,14 +71,55 @@ function displayMines() {
     for (const neighbor of Object.values(neighbors)) {
       if (neighbor) {
         neighbor.adjacentMines++;
-        if (!neighbor.mine) {
-          neighbor.element.innerHTML = neighbor.adjacentMines;
-        }
+
+        // Debug: Display adjacent mines count
+        // if (!neighbor.mine) {
+        //   neighbor.element.innerHTML = neighbor.adjacentMines;
+        // }
       }
     }
   });
 }
 
+function pickCell(x, y) {
+  if (playing) {
+    const cell = field[x][y];
+
+    if (cell.mine) {
+      cell.element.textContent = "🔴";
+      gameOver();
+    } else {
+      clearedCells++;
+      cell.element.textContent = cell.adjacentMines;
+    }
+
+    if (clearedCells == (gridSize * gridSize) - minesAmount) {
+      win();
+    }
+  }
+}
+
+function play() {
+  mines = [];
+  clearedCells = 0;
+
+  playing = true;
+  renderGrid(gridSize);
+  randomizeMines(minesAmount, gridSize);
+  placeMines();
+}
+
+function win() {
+  playing = false;
+  console.log("You win!");
+}
+
+function gameOver() {
+  playing = false;
+  console.log("You lose...");
+}
+
+playBtn.addEventListener("click", play);
+
+// Init
 renderGrid(gridSize);
-randomizeMines(minesAmount, gridSize);
-displayMines();
