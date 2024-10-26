@@ -7,10 +7,24 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Minesweeper</h1>
-  <div class="field"></div>
-  <div class="options">Grid size: <span class="options__grid-size">10 x 10</span></div>
-  <button class="play-btn">Play</button>
+  <div class="wrapper">
+    <h1>Watch your step...</h1>
+
+    <div class="field"></div>
+
+    <div class="options">
+      <div class="options__grid-size">
+        <span class="options__grid-size-label">Grid size:</span>
+        <span class="options__grid-size-value">10 x 10</span>
+      </div>
+      <div class="options__sharks-amount">
+        <span class="options__sharks-amount-label">Sharks:</span>
+        <span class="options__sharks-amount-value">10</span>
+      </div>
+      <button class="play-btn">Play</button>
+    </div>
+  </div>
+
   <script src="game.js"></script>
 </body>
 </html>

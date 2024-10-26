@@ -1,12 +1,13 @@
 const fieldElement = document.querySelector(".field");
-const gridSizeLabel = document.querySelector(".options__grid-size");
+const gridSizeLabel = document.querySelector(".options__grid-size-value");
+const sharksAmountLabel = document.querySelector(".options__sharks-amount-value");
 const playBtn = document.querySelector(".play-btn");
 
 let gridSize = 10;
-let minesAmount = 10;
+let sharksAmount = 20;
 
 let field = [];
-let mines = [];
+let sharks = [];
 let clearedCells = 0;
 
 let playing = true;
@@ -35,9 +36,9 @@ function renderField() {
         x,
         y,
         element: cell,
-        isMine: false,
+        isShark: false,
         isCleared: false,
-        adjacentMines: 0
+        adjacentSharks: 0
       };
     }
   }
@@ -45,18 +46,18 @@ function renderField() {
   gridSizeLabel.textContent = `${gridSize} x ${gridSize}`;
 }
 
-// Randomize the mine placements and add them to the field data
-function randomizeMines(count) {
-  mines = [];
+// Randomize the sharks placements and add them to the field data
+function randomizeSharks(count) {
+  sharks = [];
   let i = 0;
 
   while (i < count) {
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
-    if (!field[x][y].isMine) {
-      field[x][y].isMine = true;
-      mines.push({x, y});
+    if (!field[x][y].isShark) {
+      field[x][y].isShark = true;
+      sharks.push({x, y});
       i++;
     }
   }
@@ -76,14 +77,14 @@ function getNeighborsOfCell(x, y) {
   }
 }
 
-// Inform cells adjacent to a mine that it is next to it
-function placeMines() {
-  mines.forEach(mine => {
-    const neighbors = getNeighborsOfCell(mine.x, mine.y);
+// Inform cells adjacent to a shark that it is next to it
+function placeSharks() {
+  sharks.forEach(shark => {
+    const neighbors = getNeighborsOfCell(shark.x, shark.y);
 
     for (const neighbor of Object.values(neighbors)) {
       if (neighbor) {
-        neighbor.adjacentMines++;
+        neighbor.adjacentSharks++;
       }
     }
   });
@@ -94,27 +95,22 @@ function revealField() {
     for (let y = 0; y < gridSize; y++) {
       const cell = field[x][y];
       styleCell(cell);
-
-      if (cell.isMine) {
-        cell.element.textContent = "🔴";
-      } else {
-        cell.element.textContent = cell.adjacentMines;
-      }
     }
   }
 }
 
 // Add styling classes to a cell
 function styleCell(cell) {
-  if (cell.isMine) {
-    cell.element.classList.add("mine");
-    cell.element.textContent = "🔴";
+  if (cell.isShark) {
+    cell.element.classList.add("shark");
+    cell.element.textContent = "🦈";
   } else {
-    cell.element.textContent = cell.adjacentMines;
+    cell.element.textContent = cell.adjacentSharks;
 
-    switch (cell.adjacentMines) {
+    switch (cell.adjacentSharks) {
       case 0:
         cell.element.classList.add("empty");
+        break;
       case 1:
         cell.element.classList.add("close");
         break;
@@ -124,7 +120,9 @@ function styleCell(cell) {
       case 3:
         cell.element.classList.add("danger");
         break;
-      default: break;
+      default:
+        cell.element.classList.add("super-danger");
+        break;
     }
   }
 }
@@ -135,8 +133,8 @@ function clearCell(x, y) {
 
   const cell = field[x][y];
 
-  // Game over if the cell is a mine
-  if (cell.isMine) {
+  // Game over if the cell is a shark
+  if (cell.isShark) {
     gameOver();
     return;
   }
@@ -148,7 +146,7 @@ function clearCell(x, y) {
   clearedCells++;
   styleCell(cell);
 
-  if (cell.adjacentMines === 0) {
+  if (cell.adjacentSharks === 0) {
     for (let i = -1; i <= 1; i++) {
       for (let j = -1; j <= 1; j++) {
         // Check if all cells have been cleared -> win the game
@@ -157,7 +155,7 @@ function clearCell(x, y) {
     }
   }
 
-  if (clearedCells === (gridSize * gridSize) - minesAmount) {
+  if (clearedCells === (gridSize * gridSize) - sharksAmount) {
     win();
     return;
   }
@@ -165,13 +163,13 @@ function clearCell(x, y) {
 
 // Start playing the game
 function play() {
-  mines = [];
+  sharks = [];
   clearedCells = 0;
   playing = true;
 
   renderField();
-  randomizeMines(minesAmount);
-  placeMines();
+  randomizeSharks(sharksAmount);
+  placeSharks();
 }
 
 // Won the game
