@@ -2,7 +2,7 @@ const grid = document.querySelector(".grid");
 const gridSizeLabel = document.querySelector(".options__grid-size");
 const playBtn = document.querySelector(".play-btn");
 
-let gridSize = 5;
+let gridSize = 10;
 let minesAmount = 3;
 let field = [];
 let mines = [];
@@ -25,11 +25,18 @@ function renderGrid() {
     for (let y = 0; y < gridSize; y++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
-      cell.addEventListener("click", () => pickCell(x, y));
+      cell.addEventListener("click", () => clearCell(x, y));
 
       grid.appendChild(cell);
 
-      field[x][y] = { element: cell, mine: false, adjacentMines: 0 };
+      field[x][y] = {
+        x,
+        y,
+        element: cell,
+        isMine: false,
+        isCleared: false,
+        adjacentMines: 0
+      };
     }
   }
 
@@ -44,8 +51,8 @@ function randomizeMines(count) {
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
-    if (!field[x][y].mine) {
-      field[x][y].mine = true;
+    if (!field[x][y].isMine) {
+      field[x][y].isMine = true;
       mines.push({x, y});
       i++;
     }
@@ -83,7 +90,7 @@ function revealField() {
       const cell = field[x][y];
       styleCell(cell);
 
-      if (cell.mine) {
+      if (cell.isMine) {
         cell.element.textContent = "🔴";
       } else {
         cell.element.textContent = cell.adjacentMines;
@@ -92,19 +99,19 @@ function revealField() {
   }
 }
 
-function fillNeighbours(neighbors) {
-  for (const neighbor of Object.values(neighbors)) {
-    if (neighbor && !neighbor.mine && !neighbor.cleared) {
-      neighbor.cleared = true;
-      clearedCells++;
-      styleCell(neighbor);
-      neighbor.element.textContent = neighbor.adjacentMines;
-    }
-  }
-}
+// function fillNeighbours(neighbors) {
+//   for (const neighbor of Object.values(neighbors)) {
+//     if (neighbor && !neighbor.isMine && !neighbor.isCleared) {
+//       neighbor.isCleared = true;
+//       clearedCells++;
+//       styleCell(neighbor);
+//       neighbor.element.textContent = neighbor.adjacentMines;
+//     }
+//   }
+// }
 
 function styleCell(cell) {
-  if (cell.mine) {
+  if (cell.isMine) {
     cell.element.classList.add("mine");
     cell.element.textContent = "🔴";
   } else {
@@ -127,32 +134,36 @@ function styleCell(cell) {
   }
 }
 
-function pickCell(x, y) {
-  if (playing) {
-    const cell = field[x][y];
+function clearCell(x, y) {
+  // Cell does not exist
+  if (x >= gridSize || x < 0 || y >= gridSize || y < 0) return;
 
-    // Game over is the cell is a mine
-    if (cell.mine) {
-      gameOver();
-    }
-    // Cell is not a mine
-    else {
-      if(!cell.cleared) {
-        clearedCells++;
+  const cell = field[x][y];
 
-        // Check if cell does not have adjacent mines
-        if (cell.adjacentMines === 0) {
-          console.log("No adjacent mines");
-          const neighbors = getNeighborsOfCell(x, y);
-          fillNeighbours(neighbors);
-        }
+  // Game over if the cell is a mine
+  if (cell.isMine) {
+    gameOver();
+    return;
+  }
+
+  // Cell is already cleared
+  if (cell?.isCleared) return;
+
+  cell.isCleared = true;
+  clearedCells++;
+  styleCell(cell);
+
+  if (cell.adjacentMines === 0) {
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        clearCell(x + i, y + j);
       }
     }
-    styleCell(cell);
+  }
 
-    if (clearedCells == (gridSize * gridSize) - minesAmount) {
-      win();
-    }
+  // Check if all cells have been cleared -> win the game
+  if (clearedCells === (gridSize * gridSize) - minesAmount) {
+    win();
   }
 }
 
