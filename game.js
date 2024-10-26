@@ -3,14 +3,14 @@ const gridSizeLabel = document.querySelector(".options__grid-size");
 const playBtn = document.querySelector(".play-btn");
 
 let gridSize = 3;
-let minesAmount = 1;
+let minesAmount = 3;
 let field = [];
 let mines = [];
 let clearedCells = 0;
 
-let playing = false;
+let playing = true;
 
-function renderGrid(size) {
+function renderGrid() {
   // Create field grid
   grid.innerHTML = "";
   field = new Array(gridSize);
@@ -19,10 +19,10 @@ function renderGrid(size) {
   grid.style.gridTemplateRows = "repeat(" + gridSize + ", 1fr)";
 
   // Rows: x
-  for (let x = 0; x < size; x++) {
-    field[x] = new Array(size);
+  for (let x = 0; x < gridSize; x++) {
+    field[x] = new Array(gridSize);
     // Columns: y
-    for (let y = 0; y < size; y++) {
+    for (let y = 0; y < gridSize; y++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
       cell.addEventListener("click", () => pickCell(x, y));
@@ -36,7 +36,7 @@ function renderGrid(size) {
   gridSizeLabel.textContent = `${gridSize} x ${gridSize}`;
 }
 
-function randomizeMines(count, gridSize) {
+function randomizeMines(count) {
   mines = [];
   let i = 0;
 
@@ -81,6 +81,19 @@ function placeMines() {
   });
 }
 
+function revealField() {
+  for (let x = 0; x < gridSize; x++) {
+    for (let y = 0; y < gridSize; y++) {
+      const cell = field[x][y];
+      if (cell.mine) {
+        cell.element.textContent = "🔴";
+      } else {
+        cell.element.textContent = cell.adjacentMines;
+      }
+    }
+  }
+}
+
 function pickCell(x, y) {
   if (playing) {
     const cell = field[x][y];
@@ -104,22 +117,25 @@ function play() {
   clearedCells = 0;
 
   playing = true;
-  renderGrid(gridSize);
-  randomizeMines(minesAmount, gridSize);
+  renderGrid();
+  randomizeMines(minesAmount);
   placeMines();
 }
 
 function win() {
   playing = false;
+  revealField();
   console.log("You win!");
 }
 
 function gameOver() {
   playing = false;
+  revealField();
   console.log("You lose...");
 }
 
 playBtn.addEventListener("click", play);
 
 // Init
-renderGrid(gridSize);
+renderGrid();
+play();
