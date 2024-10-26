@@ -1,3 +1,4 @@
+const title = document.querySelector(".title");
 const fieldElement = document.querySelector(".field");
 const gridSizeInput = document.querySelector("#grid-size");
 const gridSizeLabel = document.querySelector(".options__grid-size-label");
@@ -5,7 +6,7 @@ const sharksAmountInput = document.querySelector("#sharks-amount");
 const sharksAmountLabel = document.querySelector(".options__sharks-amount-label");
 const playBtn = document.querySelector(".play-btn");
 
-let gridSize = 10;
+let gridSize = 20;
 let sharksAmount = 20;
 
 let field = [];
@@ -44,8 +45,6 @@ function renderField() {
       };
     }
   }
-
-  gridSizeLabel.textContent = `Size: ${gridSize} x ${gridSize}`;
 }
 
 // Randomize the sharks placements and add them to the field data
@@ -111,6 +110,7 @@ function styleCell(cell) {
 
     switch (cell.adjacentSharks) {
       case 0:
+        cell.element.textContent = "";
         cell.element.classList.add("empty");
         break;
       case 1:
@@ -165,15 +165,33 @@ function clearCell(x, y) {
 
 // Start playing the game
 function play() {
+  title.textContent = "Watch your step...";
+  playBtn.textContent = "Play";
+
+  gridSize = Number.parseInt(gridSizeInput.value);
   sharksAmount = Number.parseInt(sharksAmountInput.value);
 
-  sharks = [];
-  clearedCells = 0;
-  playing = true;
+    if (gridSize <= 35) {
+      sharks = [];
+      clearedCells = 0;
+      playing = true;
 
-  renderField();
-  randomizeSharks(sharksAmount);
-  placeSharks();
+      // font-size: 1rem;
+      fieldElement.className = "field";
+      if (gridSize < 15) {
+        fieldElement.classList.add("text-lg");
+      } else if (gridSize >= 15 && gridSize <= 20) {
+        fieldElement.classList.add("text-md");
+      } else {
+        fieldElement.classList.add("text-sm");
+      }
+
+      renderField();
+      randomizeSharks(sharksAmount);
+      placeSharks();
+  } else {
+    title.textContent = "Max grid size is 35";
+  }
 }
 
 // Won the game
@@ -181,6 +199,8 @@ function win() {
   playing = false;
   revealField();
   console.log("You win!");
+  title.textContent = "You survived!";
+  playBtn.textContent = "Play again";
 }
 
 // Lost the game
@@ -188,6 +208,8 @@ function gameOver() {
   playing = false;
   revealField();
   console.log("You lose...");
+  title.textContent = "Oops, the shark got you.";
+  playBtn.textContent = "Play again";
 }
 
 // Click the play button

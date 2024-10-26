@@ -8,18 +8,18 @@
 </head>
 <body>
   <div class="wrapper">
-    <h1>Watch your step...</h1>
+    <h1 class="title">Watch your step...</h1>
 
-    <div class="field"></div>
+    <div class="field text-sm"></div>
 
     <div class="options">
       <div class="options__grid-size">
-        <label class="options__grid-size-label" for="grid-size">Grid size: 10 x 10</label>
-        <!-- <input class="options__grid-size-input" value="10" id="grid-size"></input> -->
+        <label class="options__grid-size-label" for="grid-size">Grid size:</label>
+        <input class="options__grid-size-input" type="number" min="1" max="35" value="20" id="grid-size">
       </div>
       <div class="options__sharks-amount">
         <label class="options__sharks-amount-label" for="sharks-amount">Sharks:</label>
-        <input class="options__sharks-amount-value" type="number" min="1" value="10" id="sharks-amount"></input>
+        <input class="options__sharks-amount-value" type="number" min="1" value="10" id="sharks-amount">
       </div>
       <button class="play-btn">Play</button>
     </div>

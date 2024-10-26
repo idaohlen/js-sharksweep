@@ -25,9 +25,9 @@ body {
 }
 
 .wrapper {
-  padding: 4rem;
-  max-width: 600px;
-  min-height: 100%;
+  padding: 3rem;
+  height: 100%;
+  max-height: 100vh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -35,10 +35,10 @@ body {
   align-items: center;
 }
 
-h1 {
+.title {
   text-align: center;
   padding-bottom: 2rem;
-  font-size: clamp(18px, 6vw + 10px, 50px);
+  font-size: clamp(18px, 4vw + 1px, 50px);
 }
 
 input {
@@ -52,10 +52,15 @@ input {
   border: none;
 }
 
+.options {
+  max-width: 800px;
+}
+
 .field {
   display: grid;
-  gap: .5rem;
-  width: 100%;
+  gap: .3vmin;
+  width: 80vmin;
+  max-width: 800px;
   aspect-ratio: 1 / 1;
 }
 
@@ -68,7 +73,12 @@ input {
   border: 1px solid #ffffff4f;
   border-radius: .5rem;
   transition: all .3s;
+  overflow: hidden;
 }
+
+.text-sm { font-size: clamp(.5rem, 1vmin + 1px, 1rem); }
+.text-md { font-size: clamp(1rem, 1vmin + 2px, 2rem); }
+.text-lg { font-size: clamp(2rem, 1vmin + 1px, 3rem); }
 
 .cell:hover {
   --color:#65f5ffba;
@@ -120,7 +130,7 @@ input {
 
 .shark {
   --color: transparent;
-  font-size: clamp(3px, 4vw + 1px, 3rem);
+  font-size: 2rem;
   border: none;
 }
 
