@@ -128,13 +128,13 @@ input {
   --glow: #ff6152;
 }
 
-.shark {
+.shark, .crab {
   --color: transparent;
   font-size: 2rem;
   border: none;
 }
 
-.shark:hover {
+.shark:hover .crab:hover {
   --color: transparent;
   box-shadow: none;
   scale: 1.5;

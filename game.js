@@ -39,12 +39,19 @@ function renderField() {
       cell.addEventListener("contextmenu", (e) => {
         e.preventDefault();
         if (playing) {
-
-        field[x][y].element.textContent = "🦀";
-        field[x][y].element.classList.add("shark");
-
-        return false;
+          // Check if element has a crab
+          if (field[x][y].element.classList.contains("crab")) {
+            field[x][y].element.textContent = "";
+            field[x][y].element.classList.remove("crab");
+            return;
+          }
+          // If element doesn't have crab, add one if the cell isn't cleared
+          else if (!field[x][y].isCleared) {
+            field[x][y].element.textContent = "🦀";
+            field[x][y].element.classList.add("crab");
+          }
         }
+        return false;
       }, false);
 
       // Append to field
