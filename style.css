@@ -13,3 +13,23 @@
   border-top: 1px solid black;
   border-left: 1px solid black;
 }
+
+.mine {
+  background-color: darkred;
+}
+
+.empty {
+  background-color: lightsteelblue;
+}
+
+.close {
+  color: blue;
+}
+
+.warning {
+  color: orange;
+}
+
+.danger {
+  color: red;
+}
