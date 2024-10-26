@@ -31,8 +31,23 @@ function renderField() {
     for (let y = 0; y < gridSize; y++) {
       const cell = document.createElement("div");
       cell.classList.add("cell");
+
+      // Left click
       cell.addEventListener("click", () => clearCell(x, y));
 
+      //  Right click
+      cell.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        if (playing) {
+
+        field[x][y].element.textContent = "🦀";
+        field[x][y].element.classList.add("shark");
+
+        return false;
+        }
+      }, false);
+
+      // Append to field
       fieldElement.appendChild(cell);
 
       field[x][y] = {
