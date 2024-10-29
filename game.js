@@ -118,6 +118,7 @@ function revealField() {
   for (let x = 0; x < gridSize; x++) {
     for (let y = 0; y < gridSize; y++) {
       const cell = field[x][y];
+      cell.element.classList.remove("crab");
       styleCell(cell);
     }
   }
@@ -169,6 +170,8 @@ function clearCell(x, y) {
 
   cell.isCleared = true;
   clearedCells++;
+
+  cell.element.classList.remove("crab");
   styleCell(cell);
 
   if (cell.adjacentSharks === 0) {
@@ -199,8 +202,8 @@ function play() {
       clearedCells = 0;
       playing = true;
 
-      // font-size: 1rem;
       fieldElement.className = "field";
+
       if (gridSize < 15) {
         fieldElement.classList.add("text-lg");
       } else if (gridSize >= 15 && gridSize <= 20) {
