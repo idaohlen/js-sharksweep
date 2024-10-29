@@ -1,4 +1,5 @@
 const title = document.querySelector(".title");
+const tips = document.querySelector(".tips");
 const fieldElement = document.querySelector(".field");
 const gridSizeInput = document.querySelector("#grid-size");
 const gridSizeLabel = document.querySelector(".options__grid-size-label");
@@ -212,7 +213,7 @@ function play() {
       randomizeSharks(sharksAmount);
       placeSharks();
   } else {
-    title.textContent = "Max grid size is 35";
+    tips.textContent = "Max grid size is 35";
   }
 }
 
