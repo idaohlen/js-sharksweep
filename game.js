@@ -47,7 +47,7 @@ function renderField() {
           }
           // If element doesn't have crab, add one if the cell isn't cleared
           else if (!field[x][y].isCleared) {
-            field[x][y].element.textContent = "🦀";
+            field[x][y].element.innerHTML = `<i class="icon-crab"></i>`;
             field[x][y].element.classList.add("crab");
           }
         }
@@ -126,7 +126,7 @@ function revealField() {
 function styleCell(cell) {
   if (cell.isShark) {
     cell.element.classList.add("shark");
-    cell.element.textContent = "🦈";
+    cell.element.innerHTML = `<i class="icon-shark"></i>`;
   } else {
     cell.element.textContent = cell.adjacentSharks;
 
